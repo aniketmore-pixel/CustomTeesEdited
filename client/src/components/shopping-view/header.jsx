@@ -49,6 +49,10 @@ function MenuItems() {
       : navigate(getCurrentMenuItem.path);
   }
 
+  function handleSubmitDesign() {
+    navigate("/submit-design"); // Assuming you have a route for submitting designs
+  }
+
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
@@ -60,6 +64,13 @@ function MenuItems() {
           {menuItem.label}
         </Label>
       ))}
+      {/* Submit a Design Button with black background and white text */}
+      <Button
+        onClick={handleSubmitDesign}
+        className="font-medium bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition duration-300"
+      >
+        Submit a Design
+      </Button>
     </nav>
   );
 }

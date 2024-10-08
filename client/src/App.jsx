@@ -22,6 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PaypalReturnPage from "./pages/shopping-view/paypal-return";
 import PaymentSuccessPage from "./pages/shopping-view/payment-success";
 import SearchProducts from "./pages/shopping-view/search";
+import SubmitDesign from "./pages/submit-design";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -91,6 +92,7 @@ function App() {
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="submit-design" element={<SubmitDesign />} />
       </Routes>
     </div>
   );
