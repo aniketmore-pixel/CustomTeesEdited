@@ -40,67 +40,64 @@ function AdminProducts() {
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
+  // Fetching product list from the Redux store
   const { productList } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const { toast } = useToast();
 
+  // Submit form for adding or editing products
   function onSubmit(event) {
     event.preventDefault();
 
-    currentEditedId !== null
-      ? dispatch(
-          editProduct({
-            id: currentEditedId,
-            formData,
-          })
-        ).then((data) => {
-          console.log(data, "edit");
+    const action = currentEditedId !== null ? editProduct : addNewProduct;
 
-          if (data?.payload?.success) {
-            dispatch(fetchAllProducts());
-            setFormData(initialFormData);
-            setOpenCreateProductsDialog(false);
-            setCurrentEditedId(null);
-          }
-        })
-      : dispatch(
-          addNewProduct({
-            ...formData,
-            image: uploadedImageUrl,
-          })
-        ).then((data) => {
-          if (data?.payload?.success) {
-            dispatch(fetchAllProducts());
-            setOpenCreateProductsDialog(false);
-            setImageFile(null);
-            setFormData(initialFormData);
-            toast({
-              title: "Product add successfully",
-            });
-          }
-        });
-  }
+    const payload = currentEditedId !== null
+      ? { id: currentEditedId, formData }
+      : { ...formData, image: uploadedImageUrl };
 
-  function handleDelete(getCurrentProductId) {
-    dispatch(deleteProduct(getCurrentProductId)).then((data) => {
+    dispatch(action(payload)).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchAllProducts());
+        resetForm();
+        toast({
+          title: currentEditedId !== null ? "Product updated successfully" : "Product added successfully",
+        });
       }
     });
   }
 
+  // Delete a product
+  function handleDelete(productId) {
+    dispatch(deleteProduct(productId)).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts());
+        toast({
+          title: "Product deleted successfully",
+        });
+      }
+    });
+  }
+
+  // Check if the form is valid
   function isFormValid() {
     return Object.keys(formData)
       .filter((currentKey) => currentKey !== "averageReview")
-      .map((key) => formData[key] !== "")
-      .every((item) => item);
+      .every((key) => formData[key] !== "");
   }
 
+  // Reset the form state
+  function resetForm() {
+    setFormData(initialFormData);
+    setImageFile(null);
+    setUploadedImageUrl("");
+    setOpenCreateProductsDialog(false);
+    setCurrentEditedId(null);
+  }
+
+  // Fetch all products on component mount
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
-
-  console.log(formData, "productList");
 
   return (
     <Fragment>
@@ -113,6 +110,7 @@ function AdminProducts() {
         {productList && productList.length > 0
           ? productList.map((productItem) => (
               <AdminProductTile
+                key={productItem.id} // Make sure to provide a unique key
                 setFormData={setFormData}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
@@ -120,15 +118,11 @@ function AdminProducts() {
                 handleDelete={handleDelete}
               />
             ))
-          : null}
+          : <p>No products available.</p>} {/* Message when no products */}
       </div>
       <Sheet
         open={openCreateProductsDialog}
-        onOpenChange={() => {
-          setOpenCreateProductsDialog(false);
-          setCurrentEditedId(null);
-          setFormData(initialFormData);
-        }}
+        onOpenChange={resetForm}
       >
         <SheetContent side="right" className="overflow-auto">
           <SheetHeader>

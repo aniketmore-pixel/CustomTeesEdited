@@ -1,3 +1,4 @@
+
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -10,4 +11,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  server: {
+    historyApiFallback: true, // This ensures Vite serves index.html for unknown routes
+  },
+  
 });
+
+

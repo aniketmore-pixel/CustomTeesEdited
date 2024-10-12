@@ -1,4 +1,5 @@
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import CustomTeesIcon from "./Icon/favicon.png"
 import {
   Link,
   useLocation,
@@ -150,8 +151,8 @@ function ShoppingHeader() {
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
-          <HousePlug className="h-6 w-6" />
-          <span className="font-bold">Ecommerce</span>
+        <img src={CustomTeesIcon} alt="CustomTees Icon" className="h-9 w-9" />
+          <span className="font-bold text-lg">CustomTees</span>
         </Link>
         <Sheet>
           <SheetTrigger asChild>

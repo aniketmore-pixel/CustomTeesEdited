@@ -1,9 +1,22 @@
+// src/store/admin/products-slice.js
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
   isLoading: false,
   productList: [],
+  productFormData: { // New state to hold product form data
+    image: "",
+    title: "",
+    description: "",
+    category: "",
+    brand: "",
+    price: "",
+    salePrice: "",
+    totalStock: "",
+    averageReview: 0,
+  },
 };
 
 export const addNewProduct = createAsyncThunk(
@@ -65,7 +78,14 @@ export const deleteProduct = createAsyncThunk(
 const AdminProductsSlice = createSlice({
   name: "adminProducts",
   initialState,
-  reducers: {},
+  reducers: {
+    setProductFormData: (state, action) => {
+      state.productFormData = { ...state.productFormData, ...action.payload };
+    },
+    resetProductFormData: (state) => {
+      state.productFormData = initialState.productFormData; // Reset to initial state
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllProducts.pending, (state) => {
@@ -78,8 +98,16 @@ const AdminProductsSlice = createSlice({
       .addCase(fetchAllProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
+      })
+      .addCase(addNewProduct.fulfilled, (state, action) => {
+        // Optionally, you can add logic here to update productList or reset the form data
+        state.productList.push(action.payload); // Adding the new product to the list
+        state.productFormData = initialState.productFormData; // Reset form after adding a new product
       });
   },
 });
+
+// Export the action to set product form data
+export const { setProductFormData, resetProductFormData } = AdminProductsSlice.actions;
 
 export default AdminProductsSlice.reducer;

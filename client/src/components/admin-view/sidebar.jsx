@@ -3,6 +3,8 @@ import {
   ChartNoAxesCombined,
   LayoutDashboard,
   ShoppingBasket,
+  Clipboard, // Importing a new icon for Design Submissions
+  BarChart2, // Importing an icon for Sales Analytics
 } from "lucide-react";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +28,18 @@ const adminSidebarMenuItems = [
     label: "Orders",
     path: "/admin/orders",
     icon: <BadgeCheck />,
+  },
+  {
+    id: "design-submissions", // New item
+    label: "Design Submissions",
+    path: "/admin/design-submissions",
+    icon: <Clipboard />, // Choose an appropriate icon
+  },
+  {
+    id: "sales-analytics", // New Sales Analytics item
+    label: "Sales Analytics",
+    path: "/admin/sales-analytics",
+    icon: <BarChart2 />, // Using BarChart2 as an appropriate icon
   },
 ];
 

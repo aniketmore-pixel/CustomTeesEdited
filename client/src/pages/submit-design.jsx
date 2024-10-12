@@ -81,18 +81,43 @@ const SubmitDesign = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('design', image);
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('margin', margin);
+    // Upload image first
+    let imageUrl = '';
+    if (image) {
+      const formDataImage = new FormData();
+      formDataImage.append('my_file', image);
 
-    try {
-      const response = await fetch('https://customtees.onrender.com/submit-design', {
+      // Upload image to Cloudinary
+      const responseImage = await fetch('http://localhost:5000/api/admin/products/upload-image', {
         method: 'POST',
-        body: formData,
+        body: formDataImage,
+      });
+
+      if (responseImage.ok) {
+        const resultImage = await responseImage.json();
+        imageUrl = resultImage.result.url; // Get the uploaded image URL
+      } else {
+        setToastMessage('Failed to upload image. Please try again.');
+        setTimeout(() => setToastMessage(''), 3000);
+        return;
+      }
+    }
+
+    const formData = {
+      title,
+      design: imageUrl, // Use the uploaded image URL
+      name,
+      email,
+      phone,
+      margin,
+    };
+
+    // Submit the design submission
+    try {
+      const response = await fetch('http://localhost:5000/api/submit-design', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -126,10 +151,10 @@ const SubmitDesign = () => {
       )}
       <div className='info-section'>
         <h1>Getting Started</h1>
-        <p>Are you a designer, brand, agency, or start-up wanting to create t-shirts? We understand that it can be challenging—finding a reliable print shop, managing inventory, and handling customer service can be overwhelming.</p> 
-        <p>What if you could showcase your designs in a high-quality online shop without the hassle? No upfront costs, no inventory, and no shipping responsibilities—sounds great, right?</p> 
-        <p>That's where we come in. Upload, design, and launch your own products on demand or as a pre-order campaign—it's your choice!</p>
-        <p><i>*As long as you’ve been on CustomTees before, you can launch your own shirts. If you’re new to CustomTees, we’ll still need to take a quick look before your shirt or other product is available for sale.</i></p>
+        <p id='info-ka-data1'>Are you a designer, brand, agency, or start-up wanting to create t-shirts? We understand that it can be challenging—finding a reliable print shop, managing inventory, and handling customer service can be overwhelming.</p> 
+        <p id='info-ka-data2'>What if you could showcase your designs in a high-quality online shop without the hassle? No upfront costs, no inventory, and no shipping responsibilities—sounds great, right?</p> 
+        <p id='info-ka-data3'>That's where we come in. Upload, design, and launch your own products on demand or as a pre-order campaign—it's your choice!</p>
+        <p id='info-ka-data4'><i>*As long as you’ve been on CustomTees before, you can launch your own shirts. If you’re new to CustomTees, we’ll still need to take a quick look before your shirt or other product is available for sale.</i></p>
         
         {/* Add image below the text */}
         <img src={ExampleImage} alt="Example design" className="info-image" />
@@ -138,7 +163,7 @@ const SubmitDesign = () => {
       <div className='form-section'>
         <h1>Submit Your Design</h1>
         <form onSubmit={handleSubmit} className='design-form'>
-          <label>
+          <label id='naav'>
             Name:
             <input
               type="text"
@@ -149,7 +174,7 @@ const SubmitDesign = () => {
             />
           </label>
 
-          <label>
+          <label id='emailxx'>
             Email:
             <input
               type="email"
@@ -160,7 +185,7 @@ const SubmitDesign = () => {
             />
           </label>
 
-          <label>
+          <label id='phoneno'>
             Phone:
             <input
               type="tel"
@@ -171,7 +196,7 @@ const SubmitDesign = () => {
             />
           </label>
 
-          <label>
+          <label id='design'>
             Design Title:
             <input
               type="text"
@@ -196,13 +221,15 @@ const SubmitDesign = () => {
             <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input" />
           </div>
 
-          <label>
+          <label id='margin'>
             Set Margin ($):
             <input
               type="number"
               value={margin}
               onChange={(e) => setMargin(e.target.value)}
               placeholder="Set your margin"
+              min="0"
+              max="40"
             />
           </label>
 

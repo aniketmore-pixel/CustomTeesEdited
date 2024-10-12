@@ -8,9 +8,14 @@ function PaymentSuccessPage() {
   return (
     <Card className="p-10">
       <CardHeader className="p-0">
-        <CardTitle className="text-4xl">Payment is successfull!</CardTitle>
+        <CardTitle className="text-4xl">Payment is successful!</CardTitle>
       </CardHeader>
-      <Button className="mt-5" onClick={() => navigate("/shop/account")}>
+      <Button
+        className="mt-5"
+        onClick={() =>
+          navigate("/shop/account", { state: { fromPaymentSuccess: true } })
+        }
+      >
         View Orders
       </Button>
     </Card>

@@ -35,7 +35,7 @@
   label {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    color: #ccc; /* Softer white text */
+    color: black; /* Softer white text */
     font-weight: 500; /* Semi-bold */
   }
   
@@ -56,8 +56,8 @@
     display: block;
     padding: 12px;
     font-size: 16px;
-    background-color: #333; /* Dark background for inputs */
-    color: #fff; /* White text */
+    background-color: white; /* Dark background for inputs */
+    color: black; /* White text */
     border-radius: 5px;
     border: 1px solid #555; /* Light border */
   }
@@ -104,10 +104,50 @@
     width: 98%; /* Ensure it occupies full width */
     margin-top: 2px; /* Add margin for spacing */
   }
+
+  #info-ka-data1 {
+    color: white;
+  }
+
+  #info-ka-data2 {
+    color: white;
+  }
+
+  #info-ka-data3 {
+    color: white;
+  }
+
+  #info-ka-data4 {
+    color: white;
+  }
+
+  #naav {
+    color: white;
+  }
+
+  #margin {
+    color: white;
+  }
+
+  #emailxx {
+    color: black;
+  }
+
+  #phoneno {
+    color: white;
+  }
+
+  #design {
+    color: white;
+  }
   
   button:hover {
     background-color: #f0f0f0; /* Light grey on hover */
-    color: black; /* Keep text black on hover */
+    color: white; /* Keep text black on hover */
+  }
+
+  #submit-wala-button {
+    margin-top: 2px;
   }
   
   .toast {
